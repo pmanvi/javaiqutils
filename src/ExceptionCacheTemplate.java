@@ -74,7 +74,7 @@ public abstract class ExceptionCacheTemplate<T,E extends Exception>{
      * Optional method to override,This can be used to translate the
      * Exception to the required exception. This will make sure that
      * if any Exception other than 'E' will also be cached.
-     * @param e
+     * @param e  EXCEPTION
      * @return 
      */
     public E translate(Exception e){
@@ -83,8 +83,7 @@ public abstract class ExceptionCacheTemplate<T,E extends Exception>{
     /**
      * Optional method to override, Different Cache implementation could be
      * provided
-     * @param e
-     * @return 
+     * @return
      */
     public Map<ExceptionKey,Exception> getCache(){
         if(expCacheMap==null){
