@@ -2,10 +2,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * This class can be used as front end to cache the exception for recurring 
- * exceptions for heavy weight operation consuming cpu and network.
- * It provides a container for time/resource heavy operations that result in
- * recurring similar errors for some amount of time.
+ * This class can be used at the front end to cache the exception for recurring
+ * exceptions. It provides a container for time/resource heavy operations that result in
+ * recurring similar errors that can be cached for given interval of time.
+ * This helps to reduce the load on the server and improve the efficiency
  * Usage :
  * 
  * <pre>
@@ -23,8 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class ExceptionCacheTemplate<T,E extends Exception>{
     
-    private static Map<ExceptionKey,Exception> 
-                                expCacheMap = null;
+    private static Map<ExceptionKey,Exception>  expCacheMap = null;
     
     
     public abstract T handle() throws Exception;
