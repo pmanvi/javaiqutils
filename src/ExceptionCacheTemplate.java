@@ -4,11 +4,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This class can be used at the front end to cache the exception for recurring
  * exceptions. It provides a container for time/resource heavy operations that result in
- * recurring similar errors that can be cached for given interval of time.
- * This helps to reduce the load on the server and improve the efficiency
- * Usage :
+ * recurring similar errors that can be cached for a given interval of time.
+ * This helps to reduce the load on the server and improve the efficiency. <br/>
+ * Usage : <br/>
  * 
- * <pre>
+ * <p><blockquote><pre>
  *         return new ExceptionCacheTemplate<Integer,FileNotFoundException>(){
  *              @Override
  *              public Integer handle() throws FileNotFoundException {
@@ -19,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *                  }
  *                // APPLICATION CODE ENDS
  *         }.runIn(new ExceptionKey("StringObject",30000));
- * </pre>
+  * </pre></blockquote>
+ * <p>
  */
 public abstract class ExceptionCacheTemplate<T,E extends Exception>{
     
