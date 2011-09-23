@@ -76,11 +76,11 @@ class Test implements Externalizable {
         ObjectInputWrapper in = new ObjectInputWrapper(_in);
         VERSION = in.readInt();
         number = in.readInt();
-        if(VERSION>=1) {
+        //if(VERSION>=1) {
             //in.readObject();
             //version1Data = (String)in.readObject();
             //in.readObject();
-        }
+        //}
         name = (String) in.readObject();
     }
     
