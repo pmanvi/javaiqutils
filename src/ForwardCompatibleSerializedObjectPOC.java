@@ -13,7 +13,6 @@ import java.io.Serializable;
  * Sample code showing how forward compatability of serialized objects.
  * Since this Proof Of Concept, user is suppose to make code changes and 
  * understand :-)
- * @author U0117190
  */
 public class ForwardCompatibleSerializedObjectPOC {
   
@@ -58,6 +57,7 @@ class Test implements Externalizable {
     int number;
     String name;
     //String version1Data;
+    //String version2Data;
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -120,7 +120,7 @@ class Test implements Externalizable {
                              try{
                                 SKIP_END skipEnd = (SKIP_END) input.readObject();
                                 // Ok we skipped all unwanted stuff, as there was no exception
-                                t=(T)input.readObject();
+                                t=(T)get();
                                 break;
 
                              }catch(ClassCastException exp){
@@ -137,7 +137,7 @@ class Test implements Externalizable {
                      }
                  return t;
              }
-             public abstract T get() throws IOException,OptionalDataException,ClassNotFoundException;
+             public abstract T get() throws IOException,ClassNotFoundException;
          }
     }
         
