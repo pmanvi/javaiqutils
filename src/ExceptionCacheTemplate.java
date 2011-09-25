@@ -3,7 +3,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class can be used at the front end to cache the exception for recurring
- * exceptions. It provides a container for time/resource heavy operations that result in
+ * exceptions for similar kind of input data and there is fair chance that condition
+ * throw exception back is conclusively predictable for any given amount of time.
+ * <br/>
+ * It provides a container for time/resource heavy operations that result in
  * recurring similar errors that can be cached for a given interval of time.
  * This helps to reduce the load on the server and improve the efficiency. <br/>
  * Usage : <br/>
