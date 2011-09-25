@@ -1,4 +1,3 @@
-import java.io.EOFException;
 import java.io.Externalizable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,14 +9,14 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Serializable;
 /**
- * Sample code showing how forward compatability of serialized objects.
+ * Sample code showing how forward compatibility of serialized objects.
  * Since this Proof Of Concept, user is suppose to make code changes and 
  * understand :-)
  */
 public class ForwardCompatibleSerializedObjectPOC {
   
     public static void main(String[] args) throws Exception {
-        FileOutputStream fs = new FileOutputStream("TESTVERSION_1.ser");
+        FileOutputStream fs = new FileOutputStream("TESTVERSION_0.ser");
         ObjectOutputStream oos = new ObjectOutputStream(fs);
         oos.writeObject(new Test());
         oos.flush();
@@ -73,7 +72,7 @@ class Test implements Externalizable {
 
     @Override
     public void readExternal(ObjectInput _in) throws IOException, ClassNotFoundException {
-        ObjectInputWrapper in = new ObjectInputWrapper(_in);
+        ObjectInputDecorator in = new ObjectInputDecorator(_in);
         VERSION = in.readInt();
         number = in.readInt();
         //if(VERSION>=1) {
@@ -87,14 +86,14 @@ class Test implements Externalizable {
     // This class implements all the methods ObjectInput & moves the cursor
     // whenever it sees skippable data from future versions
     // WARNING : Currently for POC only 2 methods are shown
-    class ObjectInputWrapper{
+    class ObjectInputDecorator {
         ObjectInput input;
-        ObjectInputWrapper(ObjectInput input){
+        ObjectInputDecorator(ObjectInput input){
             this.input=input;
         }
         
          public int readInt() throws IOException, ClassNotFoundException{
-            return new ForwardCompatiableContainer<Integer>(){
+            return new ForwardCompatiableContainer<Integer>(input){
                 @Override
                 public Integer get() throws IOException, OptionalDataException {
                     return input.readInt();
@@ -103,7 +102,7 @@ class Test implements Externalizable {
          }
         
          public Object readObject() throws IOException, ClassNotFoundException{
-            return new ForwardCompatiableContainer<Object>(){
+            return new ForwardCompatiableContainer<Object>(input){
                 @Override
                 public Object get() throws ClassCastException, IOException, OptionalDataException,ClassNotFoundException {
                     return input.readObject();
@@ -112,15 +111,19 @@ class Test implements Externalizable {
          }
         
          abstract class ForwardCompatiableContainer<T> {
+             private ObjectInput objectInput;
+             public ForwardCompatiableContainer(final ObjectInput decorator ){
+                   this.objectInput=decorator;
+             }
              public final T execute() throws IOException,ClassNotFoundException{
                      T t= get();
                      if(t instanceof SKIP_START){
                          while(true){
                              //System.out.println("Reading till we get skip end...");
                              try{
-                                SKIP_END skipEnd = (SKIP_END) input.readObject();
+                                SKIP_END skipEnd = (SKIP_END) objectInput.readObject();
                                 // Ok we skipped all unwanted stuff, as there was no exception
-                                t=(T)get();
+                                t= get();
                                 break;
 
                              }catch(ClassCastException exp){
