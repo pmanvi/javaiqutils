@@ -9,7 +9,8 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Serializable;
 /**
- * Sample code showing how forward compatibility of serialized objects.
+ * Sample code showing how forward & backward compatibility of serialized objects
+ * is achieved.
  * Since this Proof Of Concept, user is suppose to make code changes and 
  * understand :-)
  */
