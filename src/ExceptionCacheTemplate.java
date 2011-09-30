@@ -1,4 +1,5 @@
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -46,9 +47,13 @@ public abstract class ExceptionCacheTemplate<T,E extends Exception>{
            } else {
                // Default implementation in place
                if(expCacheMap.containsKey(key)){
-                   if(key.isExpired()){
-                      expCacheMap.remove(key); 
-                   }else{
+                   Set<ExceptionKey> keys = expCacheMap.keySet();
+                   for(ExceptionKey keyIter : keys){
+                       if(keyIter.isExpired()){
+                             expCacheMap.remove(keyIter);
+                       }
+                   }
+                   if(expCacheMap.containsKey(key)){
                       throw expCacheMap.get(key);
                    }
                } 
